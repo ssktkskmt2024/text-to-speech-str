@@ -2,6 +2,7 @@ import streamlit as st
 from audio_recorder_streamlit import audio_recorder
 import openai
 import base64
+import os
 
 
 # OpenAI Whisperを活用し、音声入力から、GPT AIの応答を音声で得るアプリを作成する
@@ -59,7 +60,7 @@ def create_text_card(text, title="Response"):
     <div>
     """
     st.markdown(card_html, unsafe_allow_html=True)
-
+    
 # auto play audio function
 def auto_play_audio(audio_file):
 
@@ -71,12 +72,17 @@ def auto_play_audio(audio_file):
 
 def main():
     
-    st.sidebar.title("Audio Recorder")
-    api_key = st.sidebar.text_input("Enter your Open AI API Key", type="password")
+    st.sidebar.title("音声アプリ")
+    api_key_option = st.sidebar.radio("Choose API Key Option", ("環境変数利用", "APIキー直接入力"))
+
+    if api_key_option == "環境変数利用":
+        api_key = os.environ.get("OPENAI_API_KEY")
+    else:
+        api_key = st.sidebar.text_input("Enter your Open AI API Key", type="password")
 
     st.title("Audio to Text")
-    st.write("This is a simple web app that converts audio to text using OpenAI's Speech to Text API.")
-    
+    st.write("ユーザの音声をWhisperでテキスト化し、OpenAIのSpeech to Textを使い発話させる簡易アプリ")
+    st.write("クリックして何か話しかけてみてください。GPTが文字と音声で返答してくれます。")
 
     # chech if api key is there
     if api_key:
