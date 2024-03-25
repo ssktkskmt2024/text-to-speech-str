@@ -36,6 +36,8 @@ def text_to_audio(client, text, audio_path):
 
 # text cards function
 def create_text_card(text, title="Response"):
+    # 改行文字を<br>タグに置き換える
+    formatted_text = text.replace("\n", "<br>")
     card_html = f"""
     <style>
         .card {{
@@ -54,8 +56,8 @@ def create_text_card(text, title="Response"):
     </style>
     <div class="card">
         <div class="container">
-            <h4>{title}</b></h4>
-            <p>{text}</p>
+            <h4><b>{title}</b></h4>
+            <p style="white-space: pre-wrap;">{formatted_text}</p>
         <div>
     <div>
     """
@@ -98,6 +100,7 @@ def main():
             create_text_card(transcribed_text, title="Audio Transcription")
             # st.write("Transcribed Text: ", transcribed_text)
             ai_response = fetch_ai_response(client, transcribed_text)
+            print("AI Response: ", ai_response)
             response_audio_file = "audio_response.mp3"
             text_to_audio(client, ai_response, response_audio_file)
             # st.audio(response_audio_file, format="audio/mp3")
